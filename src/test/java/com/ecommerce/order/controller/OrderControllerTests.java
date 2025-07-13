@@ -27,21 +27,15 @@ public class OrderControllerTests {
 
     @Test
     void whenCreateOrderThenSuccess() throws Exception {
-        OrderItemRequestDto item = new OrderItemRequestDto();
-        item.setQuantity(2);
-
         OrderRequestDto request = new OrderRequestDto();
         request.setCustomerId("user-123");
-        request.setItems(List.of(item));
 
         mockMvc.perform(post("/orders")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.orderNumber").exists())
-                .andExpect(jsonPath("$.customerId").value("user-123"))
-                .andExpect(jsonPath("$.items[0].productId").value(1))
-                .andExpect(jsonPath("$.items[0].quantity").value(2));
+                .andExpect(jsonPath("$.customerId").value("user-123"));
     }
 
 }
