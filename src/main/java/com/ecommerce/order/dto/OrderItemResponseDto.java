@@ -5,12 +5,13 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class OrderItemResponseDto {
-    private Long productId;
+    private UUID productId;
     private String productName;
     private BigDecimal price;
     private Integer quantity;

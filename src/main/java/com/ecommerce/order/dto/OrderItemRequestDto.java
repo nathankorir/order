@@ -6,12 +6,17 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.UUID;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class OrderItemRequestDto {
     @NotNull
-    private Long productId;
+    private UUID orderId;
+
+    @NotNull
+    private UUID productId;
 
     @NotNull
     @Min(1)

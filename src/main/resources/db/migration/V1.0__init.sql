@@ -19,7 +19,7 @@ CREATE TABLE order_item
 (
     id           UUID PRIMARY KEY        DEFAULT uuid_generate_v4(),
     order_id     UUID REFERENCES orders (id) ON DELETE CASCADE,
-    product_id   BIGINT         NOT NULL,
+    product_id   VARCHAR(255)          NOT NULL,
     product_name VARCHAR(255)   NOT NULL,
     price        NUMERIC(19, 2) NOT NULL,
     quantity     INTEGER        NOT NULL,
