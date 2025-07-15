@@ -1,6 +1,5 @@
 package com.ecommerce.order.controller;
 
-import com.ecommerce.order.dto.OrderItemRequestDto;
 import com.ecommerce.order.dto.OrderRequestDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
@@ -11,9 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.List;
-
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -40,4 +37,22 @@ public class OrderControllerTests {
                 .andExpect(jsonPath("$.customerId").value("user-123"));
     }
 
+    @Test
+    void whenCreateAndSearchOrdersThenReturnResults() throws Exception {
+        OrderRequestDto request = new OrderRequestDto();
+        request.setCustomerId("user-123");
+
+        mockMvc.perform(post("/orders")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isOk());
+
+        mockMvc.perform(get("/orders")
+                        .param("customerId", "user-123")
+                        .param("page", "0")
+                        .param("size", "10"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content").isArray())
+                .andExpect(jsonPath("$.content.length()").value(1));
+    }
 }

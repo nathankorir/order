@@ -6,6 +6,8 @@ import com.ecommerce.order.mapper.OrderMapper;
 import com.ecommerce.order.model.Order;
 import com.ecommerce.order.model.OrderItem;
 import com.ecommerce.order.repository.OrderRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -48,5 +50,10 @@ public class OrderService {
         order.setVoided(true);
         order.setUpdatedAt(LocalDateTime.now());
         orderRepository.save(order);
+    }
+
+    public Page<OrderResponseDto> search(String customerId, Pageable pageable) {
+        Page<Order> cards = orderRepository.findOrdersByCustomerId(customerId, pageable);
+        return cards.map(orderMapper::toDto);
     }
 }
