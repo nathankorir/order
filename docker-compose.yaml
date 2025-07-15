@@ -14,7 +14,7 @@ services:
       - SPRING_DATASOURCE_USERNAME=postgres
       - SPRING_DATASOURCE_PASSWORD=postgres
     depends_on:
-      - postgres
+      - order-postgres
     restart: unless-stopped
   order-postgres:
     image: postgres:13
