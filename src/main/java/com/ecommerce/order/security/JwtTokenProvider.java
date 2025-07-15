@@ -16,7 +16,7 @@ public class JwtTokenProvider {
     @Value("${app.jwt-secret:daf66e01593f61a15b857cf433aae03a005812b31234e149036bcc8dee755dbb}")
     private String jwtSecret;
 
-    @Value("${app-jwt-expiration-milliseconds:3600}")
+    @Value("${app-jwt-expiration-milliseconds:360000}")
     private long jwtExpirationDate;
 
     // generate JWT token
@@ -46,6 +46,7 @@ public class JwtTokenProvider {
     public String getUsername(String token){
 
         return Jwts.parser()
+                .clockSkewSeconds(60)
                 .verifyWith((SecretKey) key())
                 .build()
                 .parseSignedClaims(token)

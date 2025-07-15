@@ -15,6 +15,7 @@ import com.ecommerce.order.enums.Enum.OrderStatus;
 @NoArgsConstructor
 @AllArgsConstructor
 public class OrderResponseDto {
+    private String id;
     private String orderNumber;
     private String customerId;
     private OrderStatus status;

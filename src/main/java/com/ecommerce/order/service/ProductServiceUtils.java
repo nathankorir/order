@@ -1,8 +1,6 @@
 package com.ecommerce.order.service;
 
 import com.ecommerce.order.dto.ProductResponseDto;
-import com.ecommerce.order.repository.OrderItemRepository;
-import com.ecommerce.order.repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -14,7 +12,7 @@ import java.util.UUID;
 @Service
 public class ProductServiceUtils {
     private final RestTemplate restTemplate;
-    @Value("${product.service.url:http://localhost:8080/products}")
+    @Value("${product.service.url:http://products-service:8080/products}")
     private String productServiceUrl;
 
     public ProductServiceUtils(RestTemplate restTemplate) {

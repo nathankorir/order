@@ -17,7 +17,7 @@ public class OrderRequestDto {
     @NotNull
     @NotBlank
     private String customerId;
-
-    @NotEmpty
-    private List<OrderItemRequestDto> items;
+//
+//    @NotEmpty
+//    private List<OrderItemRequestDto> items;
 }

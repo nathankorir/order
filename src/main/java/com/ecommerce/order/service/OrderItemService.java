@@ -1,12 +1,16 @@
 package com.ecommerce.order.service;
 
 import com.ecommerce.order.dto.OrderItemRequestDto;
+import com.ecommerce.order.dto.OrderItemResponseDto;
 import com.ecommerce.order.dto.ProductResponseDto;
 import com.ecommerce.order.exception.OrderException;
+import com.ecommerce.order.mapper.OrderItemMapper;
 import com.ecommerce.order.model.Order;
 import com.ecommerce.order.model.OrderItem;
 import com.ecommerce.order.repository.OrderItemRepository;
 import com.ecommerce.order.repository.OrderRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,19 +21,22 @@ import java.util.UUID;
 
 @Service
 public class OrderItemService {
+    private static final Logger logger = LoggerFactory.getLogger(OrderItemService.class);
     private final OrderRepository orderRepository;
     private final OrderItemRepository orderItemRepository;
     private final ProductServiceUtils productServiceUtils;
+    private final OrderItemMapper orderItemMapper;
 
 
-    public OrderItemService(OrderRepository orderRepository, OrderItemRepository orderItemRepository, ProductServiceUtils productServiceUtils) {
+    public OrderItemService(OrderRepository orderRepository, OrderItemRepository orderItemRepository, ProductServiceUtils productServiceUtils, OrderItemMapper orderItemMapper) {
         this.orderRepository = orderRepository;
         this.orderItemRepository = orderItemRepository;
         this.productServiceUtils = productServiceUtils;
+        this.orderItemMapper = orderItemMapper;
     }
 
     @Transactional
-    public void addItemToOrder(OrderItemRequestDto dto) {
+    public OrderItemResponseDto addItemToOrder(OrderItemRequestDto dto) {
         Order order = orderRepository.findById(dto.getOrderId())
                 .orElseThrow(() -> new NoSuchElementException("Order does not exist"));
         ProductResponseDto product = productServiceUtils.getProduct(dto.getProductId());
@@ -59,21 +66,18 @@ public class OrderItemService {
         order.setUpdatedAt(LocalDateTime.now());
 
         orderRepository.save(order);
+        return orderItemMapper.toDto(item);
     }
 
     public void removeItemFromOrder(UUID orderItemId) {
         OrderItem item = orderItemRepository.findById(orderItemId)
                 .orElseThrow(() -> new NoSuchElementException("Order item does not exist"));
-
         if (item.isVoided()) {
             throw new OrderException("Item is already removed from the order");
         }
-
         item.setVoided(true);
         orderItemRepository.save(item);
-
         productServiceUtils.restockInventory(item.getProductId(), item.getQuantity()); // ⬅️ Extracted method
-
         Order order = item.getOrder();
         BigDecimal newTotal = order.getTotalAmount().subtract(item.getSubtotal());
         order.setTotalAmount(newTotal.max(BigDecimal.ZERO));
@@ -83,7 +87,7 @@ public class OrderItemService {
     }
 
     @Transactional
-    public void updateItemQuantity(UUID orderItemId, int newQuantity) {
+    public OrderItemResponseDto updateItemQuantity(UUID orderItemId, int newQuantity) {
         OrderItem item = orderItemRepository.findById(orderItemId)
                 .orElseThrow(() -> new NoSuchElementException("Order item does not exist"));
 
@@ -115,6 +119,7 @@ public class OrderItemService {
         order.setUpdatedAt(LocalDateTime.now());
 
         orderRepository.save(order);
+        return orderItemMapper.toDto(item);
     }
 
 }

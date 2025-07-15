@@ -29,6 +29,7 @@ public class OrderController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable UUID id) {
+        logger.info("Delete order request {}", id);
         orderService.delete(id);
         return ResponseEntity.noContent().build();
     }
