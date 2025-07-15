@@ -36,19 +36,32 @@ public class SpringSecurityConfig {
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
-        http.csrf(csrf -> csrf.disable())
-                .authorizeHttpRequests((authorize) -> {
-//                    authorize.requestMatchers(HttpMethod.POST, "/api/**").hasRole("ADMIN");
-//                    authorize.requestMatchers(HttpMethod.PUT, "/api/**").hasRole("ADMIN");
-//                    authorize.requestMatchers(HttpMethod.DELETE, "/api/**").hasRole("ADMIN");
-//                    authorize.requestMatchers(HttpMethod.GET, "/api/**").hasAnyRole("ADMIN", "USER");
-//                    authorize.requestMatchers(HttpMethod.PATCH, "/api/**").hasAnyRole("ADMIN", "USER");
-//                    authorize.requestMatchers(HttpMethod.GET, "/api/**").permitAll();
-                    authorize.requestMatchers("/api/auth/**").permitAll();
-                    authorize.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll();
-                    authorize.requestMatchers("/actuator/*").permitAll();
-                    authorize.anyRequest().authenticated();
-                }).httpBasic(Customizer.withDefaults());
+//        http.csrf(csrf -> csrf.disable())
+//                .authorizeHttpRequests((authorize) -> {
+////                    authorize.requestMatchers(HttpMethod.POST, "/api/**").hasRole("ADMIN");
+////                    authorize.requestMatchers(HttpMethod.PUT, "/api/**").hasRole("ADMIN");
+////                    authorize.requestMatchers(HttpMethod.DELETE, "/api/**").hasRole("ADMIN");
+////                    authorize.requestMatchers(HttpMethod.GET, "/api/**").hasAnyRole("ADMIN", "USER");
+////                    authorize.requestMatchers(HttpMethod.PATCH, "/api/**").hasAnyRole("ADMIN", "USER");
+////                    authorize.requestMatchers(HttpMethod.GET, "/api/**").permitAll();
+//                    authorize.requestMatchers("/api/auth/**").permitAll();
+//                    authorize.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll();
+//                    authorize.requestMatchers("/actuator/*").permitAll();
+//                    authorize.anyRequest().authenticated();
+//                }).httpBasic(Customizer.withDefaults());
+
+        http
+                .cors(Customizer.withDefaults())
+                .csrf(csrf -> csrf.disable())
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(
+                                "/auth/login/**",
+                                "/swagger-ui/**",
+                                "/v3/api-docs/**"
+                        ).permitAll()
+                        .anyRequest().authenticated()
+                );
+//                .httpBasic(Customizer.withDefaults());
 
         http.exceptionHandling( exception -> exception
                 .authenticationEntryPoint(authenticationEntryPoint));

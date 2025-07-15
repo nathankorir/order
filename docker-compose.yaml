@@ -16,31 +16,6 @@ services:
     depends_on:
       - postgres
     restart: unless-stopped
-  products-service:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: product-service
-    ports:
-      - 8081:8081
-    environment:
-      - JAVA_OPTS=-Xmx512m
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/products
-      - SPRING_DATASOURCE_USERNAME=postgres
-      - SPRING_DATASOURCE_PASSWORD=postgres
-    depends_on:
-      - postgres
-    restart: unless-stopped
-  product-postgres:
-    image: postgres:13
-    container_name: products_postgres
-    restart: always
-    environment:
-      POSTGRES_DB: products
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-    ports:
-      - "5432:5432"
   order-postgres:
     image: postgres:13
     container_name: orders_postgres
