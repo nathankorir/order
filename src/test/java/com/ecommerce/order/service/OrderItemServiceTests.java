@@ -3,6 +3,7 @@ package com.ecommerce.order.service;
 import com.ecommerce.order.dto.OrderItemRequestDto;
 import com.ecommerce.order.dto.ProductResponseDto;
 import com.ecommerce.order.exception.OrderException;
+import com.ecommerce.order.mapper.OrderItemMapper;
 import com.ecommerce.order.model.Order;
 import com.ecommerce.order.model.OrderItem;
 import com.ecommerce.order.repository.OrderItemRepository;
@@ -29,6 +30,9 @@ public class OrderItemServiceTests {
 
     @InjectMocks
     private OrderItemService orderItemService;
+
+    @Mock
+    private OrderItemMapper orderItemMapper;
 
     private UUID orderId;
     private UUID productId;
