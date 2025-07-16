@@ -45,14 +45,14 @@ public class OrderControllerTests {
     @Test
     void whenGetOrderByIdThenReturnOrder() throws Exception {
         OrderRequestDto request = new OrderRequestDto();
-        request.setCustomerId("user-123");
+        request.setCustomerId("user-124");
 
         String response = mockMvc.perform(post("/orders")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.orderNumber").exists())
-                .andExpect(jsonPath("$.customerId").value("user-123"))
+                .andExpect(jsonPath("$.customerId").value("user-124"))
                 .andReturn()
                 .getResponse()
                 .getContentAsString();
@@ -63,13 +63,13 @@ public class OrderControllerTests {
         mockMvc.perform(get("/orders/" + "/" + orderId))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(orderId.toString()))
-                .andExpect(jsonPath("$.customerId").value("user-123"));
+                .andExpect(jsonPath("$.customerId").value("user-124"));
     }
 
     @Test
     void whenCreateAndSearchOrdersThenReturnResults() throws Exception {
         OrderRequestDto request = new OrderRequestDto();
-        request.setCustomerId("user-123");
+        request.setCustomerId("user-125");
 
         mockMvc.perform(post("/orders")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -77,7 +77,7 @@ public class OrderControllerTests {
                 .andExpect(status().isOk());
 
         mockMvc.perform(get("/orders")
-                        .param("customerId", "user-123")
+                        .param("customerId", "user-125")
                         .param("page", "0")
                         .param("size", "10"))
                 .andExpect(status().isOk())
