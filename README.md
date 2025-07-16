@@ -11,6 +11,8 @@ This microservice handles order management for the e-commerce platform. It allow
 - Spring Data JPA
 - Spring Security
 - PostgreSQL
+- Flyway
+- Mapstruct
 - Swagger (OpenAPI)
 - Docker / Kubernetes (optional)
 - JUnit 5 + MockMvc for testing
