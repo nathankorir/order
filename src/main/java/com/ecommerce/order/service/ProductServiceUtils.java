@@ -1,6 +1,8 @@
 package com.ecommerce.order.service;
 
 import com.ecommerce.order.dto.ProductResponseDto;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -11,6 +13,7 @@ import java.util.UUID;
 
 @Service
 public class ProductServiceUtils {
+    private static final Logger logger = LoggerFactory.getLogger(ProductServiceUtils.class);
     private final RestTemplate restTemplate;
     @Value("${product.service.url:http://products-service:8080/products}")
     private String productServiceUrl;
@@ -23,6 +26,7 @@ public class ProductServiceUtils {
         String url = productServiceUrl + "/" + productId;
         ResponseEntity<ProductResponseDto> response = restTemplate.getForEntity(url, ProductResponseDto.class);
         if (!response.getStatusCode().is2xxSuccessful() || response.getBody() == null) {
+            logger.error("Could not get product {}", productId);
             throw new NoSuchElementException("Product not found with ID: " + productId);
         }
         return response.getBody();

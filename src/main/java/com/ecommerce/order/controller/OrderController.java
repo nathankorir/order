@@ -40,4 +40,11 @@ public class OrderController {
     public Page<OrderResponseDto> search(@RequestParam(required = false) String customerId, Pageable pageable) {
         return orderService.search(customerId, pageable);
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<OrderResponseDto> get(@PathVariable UUID id) {
+        logger.info("Get order request {}", id);
+        OrderResponseDto order = orderService.get(id);
+        return ResponseEntity.ok(order);
+    }
 }

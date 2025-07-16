@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 import com.ecommerce.order.enums.Enum.PaymentStatus;
 import com.ecommerce.order.enums.Enum.OrderStatus;
@@ -15,7 +16,7 @@ import com.ecommerce.order.enums.Enum.OrderStatus;
 @NoArgsConstructor
 @AllArgsConstructor
 public class OrderResponseDto {
-    private String id;
+    private UUID id;
     private String orderNumber;
     private String customerId;
     private OrderStatus status;

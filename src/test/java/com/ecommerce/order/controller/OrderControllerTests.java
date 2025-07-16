@@ -1,6 +1,8 @@
 package com.ecommerce.order.controller;
 
 import com.ecommerce.order.dto.OrderRequestDto;
+import com.ecommerce.order.dto.OrderResponseDto;
+import com.ecommerce.order.dto.ProductResponseDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +11,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
+
+import java.math.BigDecimal;
+import java.util.UUID;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -34,6 +39,30 @@ public class OrderControllerTests {
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.orderNumber").exists())
+                .andExpect(jsonPath("$.customerId").value("user-123"));
+    }
+
+    @Test
+    void whenGetOrderByIdThenReturnOrder() throws Exception {
+        OrderRequestDto request = new OrderRequestDto();
+        request.setCustomerId("user-123");
+
+        String response = mockMvc.perform(post("/orders")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.orderNumber").exists())
+                .andExpect(jsonPath("$.customerId").value("user-123"))
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        OrderResponseDto created = objectMapper.readValue(response, OrderResponseDto.class);
+        UUID orderId = created.getId();
+
+        mockMvc.perform(get("/orders/" + "/" + orderId))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(orderId.toString()))
                 .andExpect(jsonPath("$.customerId").value("user-123"));
     }
 

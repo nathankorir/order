@@ -56,4 +56,9 @@ public class OrderService {
         Page<Order> cards = orderRepository.findOrdersByCustomerId(customerId, pageable);
         return cards.map(orderMapper::toDto);
     }
+
+    public OrderResponseDto get(UUID id) {
+        Order order = orderRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Order does not exist"));
+        return orderMapper.toDto(order);
+    }
 }
