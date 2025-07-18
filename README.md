@@ -77,3 +77,7 @@ Use this endpoint to get a token.
 
 Note:
 Authentication credentials are hardcoded for development/demo purposes using Spring Security. Update it with real user management in production.
+
+### Default user credentials
+Username: user
+Password: password
